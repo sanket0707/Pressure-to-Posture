@@ -1,0 +1,19 @@
+
+axis_range: 32767
+date_folder_list: '20230626'
+frequency: 10
+joints:
+  Left ankle: 12
+  Left elbow: 4
+  Left hip: 8
+  Left knee: 10
+  Left shoulder: 2
+  Left toe: 14
+  Left wrist: 6
+  Right ankle: 11
+  Right elbow: 3
+  Right hip: 7
+  Right knee: 9
+  Right shoulder: 1
+  Right toe: 13
+  Right wrist: 5
