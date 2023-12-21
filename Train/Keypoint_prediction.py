@@ -53,6 +53,7 @@ leg_data = np.swapaxes([joint_data[:, i-1, :] for i in body[1]], 0, 1).astype(in
 leg_data = np.swapaxes(leg_data, 1, 2).astype(int)
 torso_data = np.swapaxes([joint_data[:, i-1, :] for i in body[2]], 0, 1).astype(int)
 torso_data = np.swapaxes(torso_data, 1, 2).astype(int)
+#torso_data = np.swapaxes(torso_data, 1, 2).astype(int)
 
 arm_data.shape
 
