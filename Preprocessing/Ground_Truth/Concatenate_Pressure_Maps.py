@@ -1,22 +1,24 @@
 import cv2
+import numpy as np
 
-# Load all images (assuming they are named img1, img2, ..., img10)
+# Load all images
 images = [cv2.imread(f'Preprocessing/Concatenate_Dataset/20230626_1_set_2_1.p_frame_{i}.png') for i in range(153, 163)]
 
-# Resize images if necessary
-# ...
+# Assuming all images are of the same size, initialize the result with an array of zeros
+# The shape of the result is the same as each image
+result = np.zeros_like(images[0])
+
+# Add each image to the result
 for img in images:
-    print(img.shape)
+    result = cv2.add(result, img)
 
+# Normalize the result if necessary (e.g., if you want to scale pixel values to a certain range)
 
-# Initialize the result with the first image
-result = images[0]
-
-# Blend each image with the result
-for img in images[1:]:
-    result = cv2.addWeighted(result, 0.5, img, 0.5, 0)
-
-# Save or display the final image
+# Display the final image
 cv2.imshow('Merged Image', result)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+
+
