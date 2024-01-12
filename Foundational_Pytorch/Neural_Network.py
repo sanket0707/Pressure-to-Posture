@@ -47,15 +47,18 @@ optimiser = optim.SGD(model.parameters(), lr=1e-4)
 
 for t in range(num_epochs):
     y_pred = model(x)
-
+    # cross entropy loss
     loss = loss_function(y_pred, y)
     print(t , loss)
-
+    # reset parameters gradient to zero
     optimiser.zero_grad()
-
+    # find gradients w.r.t training parameters
     loss.backward()
-
     optimiser.step()
+
+
+
+
 
 
 
