@@ -114,8 +114,11 @@ def setup_system(system_config: SystemConfiguration) -> None:
 ################################################################
 def train():
     # change model in training mode
+    model.train()
     # to get batch loss
+    batch_loss = np.array([])
     # to get batch accuracy
+    batch_acc = np.array([])
     for batch_idx, (data, target) in enumerate(train_loader):
         # clone target
         # send data to device (it is mandatory if GPU has to be used)
