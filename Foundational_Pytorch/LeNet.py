@@ -114,6 +114,7 @@ def setup_system(system_config: SystemConfiguration) -> None:
 ################################################################
 def train():
     # change model in training mode
+    model.train()
     # to get batch loss
     # to get batch accuracy
     for batch_idx, (data, target) in enumerate(train_loader):
