@@ -114,7 +114,7 @@ def setup_system(system_config: SystemConfiguration) -> None:
 ################################################################
 def train():
     # change model in training mode
-    model.train()
+
     # to get batch loss
     batch_loss = np.array([])
     # to get batch accuracy
