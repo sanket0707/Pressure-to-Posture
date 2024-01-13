@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -112,26 +113,44 @@ def setup_system(system_config: SystemConfiguration) -> None:
 ################################################################
 ################ Step 4 - Training #######################
 ################################################################
-def train():
+import torch.nn.functional as F
+def train(train_config: TrainingConfiguration,
+          model: nn.Module,
+          optimizer: torch.optim.optimizer ,
+          train_loader: torch.utils.data.Dataloader,
+          epoch_idx: int ) -> tuple[float, float]:
     # change model in training mode
-
+    model.train()
     # to get batch loss
     batch_loss = np.array([])
     # to get batch accuracy
     batch_acc = np.array([])
     for batch_idx, (data, target) in enumerate(train_loader):
         # clone target
+        indx_target = target.clone()
         # send data to device (it is mandatory if GPU has to be used)
+        data = data.to(train_config.device)
         # send target to device
+        target = target.to(train_config.device)
         # reset parameters gradient to zero
+        optimizer.zero_grad()
         # forward pass to the model
+        output = model(data)
         # cross entropy loss
+        loss = F.cross_entropy(output,target)
         # find gradients w.r.t training parameters
+        loss.backward()
         # Update parameters using gradients
+        optimizer.step()
         # get probability score using softmax
+        prob = F.softmax(output,dim=1)
         # get the index of the max probability
+        pred = prob.data.max(dim=1)[1]
         # correct prediction
+        correct = pred.cpu().eq(indx_target).sum()
         # accuracy
+        acc = float(correct) / float(len(data))
+        batch_acc = np.append(batch_acc,[acc])
 
         if batch_idx % train_config.log_interval == 0 and batch_idx > 0:
             print(
@@ -139,6 +158,8 @@ def train():
                     epoch_idx, batch_idx * len(data), len(train_loader.dataset), loss.item(), acc
                 )
             )
+
+
 
     epoch_loss = batch_loss.mean()
     epoch_acc = batch_acc.mean()
@@ -151,6 +172,41 @@ def train():
 ################################################################
 ################ Step 5 - Validation  ######################
 ################################################################
+def val(train_config : TrainingConfiguration,
+        model : nn.Module,
+        test_loader : torch.utils.data.Dataloader
+) -> tuple[float, float] :
+
+    model.eval()
+    test_loss = 0
+    count_correct_prediction = 0
+
+    with torch.not_equal():
+
+        for data, target in test_loader:
+            indx_target = data.clone()
+            data = data.to(train_config.device)
+
+            target = target.to(train_config.device)
+            output = model(data)
+
+            test_loss += F.cross_entropy(output, target).item()
+            prob = F.softmax(test_loss, dim=1)
+
+            pred = prob.data.max(dim=1)[1]
+
+            count_correct_prediction = pred.cpu().eq(indx_target).sum()
+
+        test_loss = test_loss / len(test_loader)
+
+        accuracy = 100* count_correct_prediction/len(test_loader.dataset)
+        return  test_loss, accuracy/100.0
+
+
+
+
+
+
 
 
 
