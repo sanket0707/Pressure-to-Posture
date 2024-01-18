@@ -4,7 +4,8 @@ from PIL import Image
 import os
 import cv2
 import matplotlib.pyplot as plt
-
+from PIL import Image, ImageTk
+import tkinter as tk
 ####################################################################
 ############## Visualise the sample dataset- Starts #################
 ####################################################################
@@ -221,33 +222,30 @@ class PressureSensorDataset(Dataset):
 
 data_root = r'C:\Users\sanke\PycharmProjects\Pressure-to-Posture\Dataset\Pressure_Image_Dataset\Pressure_Sensor_Data'
 
+
 train_dataset =  PressureSensorDataset(data_root, train=True, image_shape=256)
 
+
 print('Length of the dataset: {}'.format(len(train_dataset)))
-
-img, trgt = train_dataset[300]
-
+img, trgt = train_dataset[500]
 print('Label: {}'.format(trgt))
 print(img)
-#plt.imshow(img)
-#plt.show()
+#img.show()
 
 
 
 
-import numpy as np
-# Convert the PIL Image to a NumPy array
-img_array = np.array(img)
-# Print the NumPy array
-#print(img_array)
+# Create a Tkinter window
+window = tk.Tk()
+window.title("Pressure Sensor Image")
+# Convert the PIL image to a format Tkinter can use
+tk_img = ImageTk.PhotoImage(img)
+# Create a Label widget to display your image
+label = tk.Label(window, image=tk_img)
+label.pack()
+# Run the application
+window.mainloop()
 
-
-# Assuming img_array is an RGB image array
-max_values = np.max(img_array, axis=(0, 1))  # Max in each channel
-min_values = np.min(img_array, axis=(0, 1))  # Min in each channel
-
-print("Maximum values per channel (RGB):", max_values)
-print("Minimum values per channel (RGB):", min_values)
 
 
 
